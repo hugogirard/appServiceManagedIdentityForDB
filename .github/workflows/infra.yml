@@ -13,7 +13,7 @@ jobs:
 
     env:
       LOCATION: 'CanadaCentral'
-      RESOURCE_GROUP_NAME: 'rg-app-service-demo'
+      RESOURCE_GROUP_NAME: 'rg-app-service-demo-managed-identity'
 
     runs-on: ubuntu-latest
 
