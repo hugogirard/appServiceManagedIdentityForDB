@@ -9,3 +9,11 @@ module vnet 'modules/networking/vnet.bicep' = {
     suffix: suffix
   }
 }
+
+module web 'modules/webapp/webapp.bicep' = {
+  name: 'web'
+  params: {
+    location: location
+    suffix: suffix
+  }
+}
