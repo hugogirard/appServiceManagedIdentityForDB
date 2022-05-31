@@ -17,7 +17,7 @@ resource serverFarm 'Microsoft.Web/serverfarms@2020-06-01' = {
   kind: 'app'
 }
 
-resource webApp1 'Microsoft.Web/sites@2020-06-01' = {
+resource webApp 'Microsoft.Web/sites@2020-06-01' = {
   name: 'webapp-${suffix}'
   location: location  
   identity: {
@@ -45,3 +45,5 @@ resource webApp1 'Microsoft.Web/sites@2020-06-01' = {
     virtualNetworkSubnetId: webAppDelegationSubnetId  
   }  
 }
+
+output systemAssignedIdentity string = webApp.identity.principalId
