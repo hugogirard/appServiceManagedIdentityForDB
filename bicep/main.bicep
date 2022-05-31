@@ -35,5 +35,6 @@ module vault 'modules/vault/keyvault.bicep' = {
   params: {
     location: location
     suffix: suffix
+    identityWebApp: web.outputs.systemAssignedIdentity
   }
 }
