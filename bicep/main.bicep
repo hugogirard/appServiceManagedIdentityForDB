@@ -15,5 +15,6 @@ module web 'modules/webapp/webapp.bicep' = {
   params: {
     location: location
     suffix: suffix
+    webAppDelegationSubnetId: vnet.outputs.subnetDelegationId
   }
 }
