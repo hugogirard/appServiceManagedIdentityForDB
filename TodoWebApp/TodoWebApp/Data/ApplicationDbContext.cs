@@ -11,5 +11,6 @@ namespace TodoWebApp.Data
         {
         }
         public DbSet<TodoWebApp.Models.Todo>? Todo { get; set; }
+        public DbSet<TodoWebApp.Models.Item>? Task { get; set; }
     }
 }
