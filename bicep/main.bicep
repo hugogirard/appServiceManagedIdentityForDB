@@ -29,3 +29,11 @@ module web 'modules/webapp/webapp.bicep' = {
     }
   }
 }
+
+module vault 'modules/vault/keyvault.bicep' = {
+  name: 'vault'
+  params: {
+    location: location
+    suffix: suffix
+  }
+}
