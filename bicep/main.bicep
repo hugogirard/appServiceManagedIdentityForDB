@@ -24,6 +24,8 @@ module web 'modules/webapp/webapp.bicep' = {
     location: location
     suffix: suffix
     webAppDelegationSubnetId: vnet.outputs.subnetDelegationId
-    userAssignedIdentityId: identity.outputs.userAssignedIdentityId
+    userAssignedIdentityId: {
+      '${identity.outputs.userAssignedIdentityId}': {}
+    }
   }
 }

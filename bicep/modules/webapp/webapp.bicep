@@ -1,7 +1,7 @@
 param location string
 param suffix string
 param webAppDelegationSubnetId string
-param userAssignedIdentityId string
+param userAssignedIdentityId object
 
 
 resource serverFarm 'Microsoft.Web/serverfarms@2020-06-01' = {
@@ -22,9 +22,7 @@ resource webApp1 'Microsoft.Web/sites@2020-06-01' = {
   location: location  
   identity: {
     type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      userAssignedIdentityId: {}
-    }
+    userAssignedIdentities: userAssignedIdentityId
   }
   properties: {
     serverFarmId: serverFarm.id
