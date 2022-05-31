@@ -30,6 +30,7 @@ resource vault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
   name: 'pe-vault'
+  location: 'global'
   properties: {
     subnet: {
       id: subnetId
@@ -50,6 +51,7 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.vaultcore.azure.net'
+  location: 'global'
 }
 
 resource vnetLinks 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
