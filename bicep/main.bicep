@@ -36,5 +36,8 @@ module vault 'modules/vault/keyvault.bicep' = {
     location: location
     suffix: suffix
     identityWebApp: web.outputs.systemAssignedIdentity
+    subnetId: vnet.outputs.subnetPeId
+    vnetId: vnet.outputs.vnetId
+    vnetName: vnet.outputs.vnetName
   }
 }
