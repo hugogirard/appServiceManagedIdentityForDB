@@ -1,0 +1,53 @@
+name: Create Infra
+
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - "bicep/**/**.bicep"
+
+jobs:
+  create-azure-resources:
+
+    env:
+      LOCATION: 'CanadaCentral'
+      RESOURCE_GROUP_NAME: 'rg-app-service-demo'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Validate that bicep builds and build
+        run: |
+          bicep build ./bicep/main.bicep  
+
+      - name: Run Microsoft Security DevOps
+        uses: microsoft/security-devops-action@preview
+        id: msdo
+
+      - name: Upload results to Security tab
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: ${{ steps.msdo.outputs.sarifFile }}     
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Azure Resources Group
+        run: |
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.LOCATION }}
+
+      - name: Deploy Azure Resource Manager (ARM) Template
+        id: deployAzRes
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./bicep/main.json
+          parameters: location=${{ env.LOCATION }}
+    
