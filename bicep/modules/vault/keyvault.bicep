@@ -30,6 +30,7 @@ resource vault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
 
 resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
   name: 'pe-vault'
+  location: location
   properties: {
     subnet: {
       id: subnetId
