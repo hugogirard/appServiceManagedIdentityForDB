@@ -51,7 +51,6 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-08-01' = {
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: 'privatelink.vaultcore.azure.net'
-  location: 'global'
 }
 
 resource vnetLinks 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
