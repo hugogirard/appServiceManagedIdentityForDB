@@ -4,13 +4,13 @@ using TodoWebApp.Models;
 
 namespace TodoWebApp.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ItemDbContext : IdentityDbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public ItemDbContext(DbContextOptions<ItemDbContext> options)
             : base(options)
         {
         }
-        public DbSet<TodoWebApp.Models.Todo>? Todo { get; set; }
+        public DbSet<TodoWebApp.Models.Item>? Item { get; set; }
         public DbSet<TodoWebApp.Models.Item>? Task { get; set; }
     }
 }

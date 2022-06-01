@@ -11,7 +11,7 @@ using TodoWebApp.Data;
 
 namespace TodoWebApp.Data.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(TodoDbContext))]
     [Migration("20220531141638_initialsetup")]
     partial class initialsetup
     {

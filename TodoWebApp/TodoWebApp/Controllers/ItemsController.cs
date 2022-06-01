@@ -12,9 +12,9 @@ namespace TodoWebApp.Controllers
 {
     public class ItemsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ItemDbContext _context;
 
-        public ItemsController(ApplicationDbContext context)
+        public ItemsController(ItemDbContext context)
         {
             _context = context;
         }

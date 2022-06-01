@@ -5,20 +5,23 @@ using TodoWebApp.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("Default Connection");
+var connectionString = builder.Configuration.GetConnectionString("Connection1");
 
-//var connectionString2 = builder.Configuration.GetConnectionString("Connection2");
+var connectionString2 = builder.Configuration.GetConnectionString("Connection2");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+builder.Services.AddDbContext<TodoDbContext>
+    (options =>
     options.UseSqlServer(connectionString));
 
-//builder.Services.AddDbContext<ApplicationDbContext>(options =>
-//    options.UseSqlServer(connectionString2));
+builder.Services.AddDbContext<ItemDbContext>
+    (options =>
+    options.UseSqlServer(connectionString2));
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
+    .AddEntityFrameworkStores<TodoDbContext>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
