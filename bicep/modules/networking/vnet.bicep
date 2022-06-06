@@ -1,0 +1,78 @@
+param location string
+param suffix string
+
+var vnetAddressCIDR = '10.0.0.0/16'
+var webAppSubnetCIDR = '10.0.1.0/24'
+var peSubnetCIDR = '10.0.2.0/24'
+var jumpboxSubnetCIDR = '10.0.3.0/24'
+
+resource nsgWebapp 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+  name: 'nsg-webapp'
+  location: location
+  properties: {
+    securityRules: [
+    ]
+  }
+}
+
+resource nsgJumpbox 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+  name: 'nsg-jumpbox'
+  location: location
+  properties: {
+    securityRules: [
+    ]
+  }
+}
+
+resource vnet 'Microsoft.Network/virtualNetworks@2021-05-01' = {
+  name: 'vnet-webapp-${suffix}'
+  location: location
+  properties: {
+    addressSpace: {
+      addressPrefixes: [
+        vnetAddressCIDR
+      ]
+    }
+    subnets: [
+      {
+        name: 'snet-webapp-delegation'
+        properties: {
+          addressPrefix: webAppSubnetCIDR
+          delegations: [
+            {
+              name: 'webappdelegation'
+              properties: {
+                serviceName: 'Microsoft.Web/serverfarms'
+              }
+            }            
+          ]
+          networkSecurityGroup: {
+            id: nsgWebapp.id
+          }
+        }
+      }
+      {
+        name: 'snet-pe'
+        properties: {
+          addressPrefix: peSubnetCIDR
+          privateEndpointNetworkPolicies: 'Disabled'
+        }
+      }
+      {
+        name: 'snet-jumpbox'
+        properties: {
+          addressPrefix: jumpboxSubnetCIDR
+          networkSecurityGroup: {
+            id: nsgJumpbox.id
+          }
+        }
+      }      
+    ]
+  }
+}
+
+output subnetDelegationId string = vnet.properties.subnets[0].id
+output subnetPeId string = vnet.properties.subnets[1].id
+output subnetJumpboxId string = vnet.properties.subnets[2].id
+output vnetName string = vnet.name
+output vnetId string = vnet.id

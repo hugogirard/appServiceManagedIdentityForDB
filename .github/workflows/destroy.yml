@@ -1,0 +1,24 @@
+name: Destroy Azure Resources
+
+on:
+  workflow_dispatch:    
+
+jobs:
+  destroy-azure-resources:
+
+    env:      
+      RESOURCE_GROUP_NAME: 'rg-app-service-demo-managed-identity'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Azure Resources Group
+        run: |
+           az group delete --name ${{ env.RESOURCE_GROUP_NAME }} --no-wait -y
+    

@@ -1,0 +1,51 @@
+name: Create Azure Resources
+
+on:
+  workflow_dispatch:    
+  push:
+    branches:
+      - "main"
+    paths:
+      - "bicep/**/**.bicep"
+
+jobs:
+  create-azure-resources:
+
+    env:
+      LOCATION: 'CanadaCentral'
+      RESOURCE_GROUP_NAME: 'rg-app-service-demo-managed-identity'
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Validate that bicep builds and build
+        run: |
+          bicep build ./bicep/main.bicep  
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Create Azure Resources Group
+        run: |
+          az group create -n ${{ env.RESOURCE_GROUP_NAME }} -l ${{ env.LOCATION }}
+
+      - name: Deploy Azure Resource Manager (ARM) Template
+        id: deployAzRes
+        uses: Azure/arm-deploy@v1
+        with:
+          subscriptionId: ${{ secrets.SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
+          template: ./bicep/main.json
+          parameters: location=${{ env.LOCATION }} administratorLogin=${{ secrets.ADMIN_LOGIN }} administratorLoginPassword=${{ secrets.ADMIN_PASSWORD }}
+    
+      - uses: gliech/create-github-secret-action@v1
+        name: Write Web App Name Fibonnaci API
+        with:
+          name: WEBAPP_NAME
+          value: ${{ steps.deployAzRes.outputs.webappName }}
+          pa_token: ${{ secrets.PA_TOKEN_MANAGED_IDENTITY_WEBAPP }}    
