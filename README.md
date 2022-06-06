@@ -8,3 +8,4 @@ For more information about Azure Managed Identities click [here](https://docs.mi
 
 # Architecture
 
+![architecture](/diagram/architecture.drawio.png)
