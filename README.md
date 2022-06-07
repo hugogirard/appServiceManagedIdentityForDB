@@ -67,3 +67,44 @@ Now, go to the GitHub Actions tab and execute the action called **Create Azure R
 
 Now, you need to assign an admin to the Azure SQL Server, this can be any user in your Azure AD but it's recommended to assign an AD Group.
 
+Go to your Azure SQL Server and in the **Azure Active Directory** in the **left menu**
+
+![architecture](/diagram/SQL Azure AD.png)
+
+Now, click the **Set Admin button**, from there add an user or an Azure AD Group.
+
+## Create the User-assigned managed identity in both databases
+
+Now, you need to create the User-assigned managed identity in both databases, first go to the resource group called **rg-app-service-demo-managed-identity**.
+
+You will find an identity with the name **user-webapp-***, copy the name of this identity.
+
+![architecture](/diagram/identity.png)
+
+Now go to the **Azure SQL Server** in the **networking** tab, in the Firewall rules be sure to **Add your client IPv4 Address** and click save.
+
+Now go to the TodoDB and click the **Query editor (preview)** in the left menu
+
+Now be sure to login with Active Directory authentication and NOT THE SQL SERVER AUTHENTICATION.  Your user need to be admin of the SQL Server.
+
+Now just run the following command
+
+```
+CREATE USER [user-assigned-identity-name] FROM EXTERNAL PROVIDER;
+ALTER ROLE db_datareader ADD MEMBER [user-assigned-identity-name];
+ALTER ROLE db_datawriter ADD MEMBER [user-assigned-identity-name];
+ALTER ROLE db_ddladmin ADD MEMBER [user-assigned-identity-name];
+```
+
+In this demo, the database tables are created thru code, this is why the role db_ddladmin is needed, in a real production scenario give the less priviledge access.
+
+Repeat the same process for the OrderDB.
+
+## Deploy the Web App
+
+Now, you just need to deploy the WebApp, go to the Actions tab in your GitHub repository.  Now execute the action **Build and deploy ASP.Net Core app to an Azure Web App**.
+
+## Execute the WebApp
+
+Go to the WebApp, you should see this page
+
